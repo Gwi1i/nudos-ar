@@ -1,0 +1,126 @@
+<title>Nudo N-01 en AR</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+/* Layout: hoja de plano — visor grande arriba, cajetín y despiece debajo */
+:root {
+  --bg: #eef1f3; --paper: #fbfcfc; --ink: #1b2329; --muted: #5d6a73;
+  --line: #c8d0d5; --accent: #00548c; --accent-ink: #ffffff;
+  --display: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12171b; --paper: #1a2126; --ink: #e3e9ec; --muted: #93a1aa;
+  --line: #2e3a42; --accent: #4ea3dc; --accent-ink: #0b1216; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12171b; --paper: #1a2126; --ink: #e3e9ec; --muted: #93a1aa;
+  --line: #2e3a42; --accent: #4ea3dc; --accent-ink: #0b1216; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: 13px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 32px; }
+.wrap { max-width: 960px; margin: 0 auto; display: grid; gap: 16px; }
+.sheet { background: var(--paper); border: 1px solid var(--line); }
+header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+h1 { font-family: var(--display); font-weight: 700; font-size: 28px; margin: 0; letter-spacing: .01em; text-wrap: balance; }
+.sub { color: var(--muted); }
+
+model-viewer { width: 100%; height: min(62vh, 560px); min-height: 340px; display: block;
+  background: repeating-linear-gradient(0deg, transparent 0 23px, color-mix(in srgb, var(--line) 45%, transparent) 23px 24px),
+              repeating-linear-gradient(90deg, transparent 0 23px, color-mix(in srgb, var(--line) 45%, transparent) 23px 24px), var(--paper);
+  --poster-color: transparent; }
+.ar-btn { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  font: 700 16px var(--display); letter-spacing: .04em; text-transform: uppercase;
+  background: var(--accent); color: var(--accent-ink); border: 0; padding: 12px 22px; cursor: pointer; }
+.ar-btn:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.no-ar { position: absolute; bottom: 12px; left: 12px; right: 12px; color: var(--muted); font-size: 12px; text-align: center; }
+
+.tools { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 12px; border-top: 1px solid var(--line); }
+.tools button { font: 500 12px var(--mono); background: transparent; color: var(--ink); border: 1px solid var(--line); padding: 7px 10px; cursor: pointer; }
+.tools button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 680px) { .grid { grid-template-columns: 1fr; } }
+.block { padding: 14px 16px; min-width: 0; }
+h2 { font: 700 13px var(--display); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 10px; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+td, th { text-align: left; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 500; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+.sw { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+.cajetin { display: grid; grid-template-columns: auto 1fr; }
+.cajetin div { padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.cajetin div:nth-child(odd) { color: var(--muted); padding-left: 0; }
+p { margin: 0 0 8px; line-height: 1.55; max-width: 65ch; }
+@media (prefers-reduced-motion: reduce) { model-viewer { --progress-bar-height: 0; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Nudo N-01 · Te DN150 × DN100</h1>
+    <span class="sub">Abastecimiento · escala 1:1 en AR</span>
+  </header>
+
+  <section class="sheet" style="position:relative">
+    <model-viewer id="mv" src="nudo.glb" alt="Nudo de abastecimiento con te DN150 por DN100 y tres válvulas de compuerta"
+      ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="fixed"
+      camera-controls touch-action="pan-y" shadow-intensity="1" exposure="1.05"
+      camera-orbit="35deg 62deg auto" interaction-prompt="none">
+      <button slot="ar-button" class="ar-btn" type="button">Ver en AR</button>
+      <div class="no-ar" id="noar" hidden>AR no disponible en este navegador. Gira el modelo con el dedo o el ratón.</div>
+    </model-viewer>
+    <div class="tools">
+      <button type="button" id="b-rot" aria-pressed="false">Rotación automática</button>
+      <button type="button" id="b-planta">Planta</button>
+      <button type="button" id="b-alzado">Alzado</button>
+      <button type="button" id="b-iso">Isométrica</button>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="sheet block">
+      <h2>Despiece</h2>
+      <div class="scroll"><table>
+        <thead><tr><th>Ud.</th><th>Elemento</th><th>Características</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><span class="sw" style="background:#34383e"></span>Te bridada</td><td>FD DN150×100 PN16</td></tr>
+          <tr><td>2</td><td><span class="sw" style="background:#00548c"></span>Válvula compuerta</td><td>DN150 PN16, F4 L=210</td></tr>
+          <tr><td>1</td><td><span class="sw" style="background:#00548c"></span>Válvula compuerta</td><td>DN100 PN16, F4 L=190</td></tr>
+          <tr><td>2</td><td><span class="sw" style="background:#34383e"></span>Carrete brida-liso</td><td>FD DN150, L≈0,68 m</td></tr>
+          <tr><td>1</td><td><span class="sw" style="background:#34383e"></span>Carrete brida-liso</td><td>FD DN100, L≈0,55 m</td></tr>
+          <tr><td>48</td><td><span class="sw" style="background:#aaacb0"></span>Tornillería</td><td>8×M20 (DN150) · 8×M16 (DN100)</td></tr>
+          <tr><td>4</td><td><span class="sw" style="background:#96948c"></span>Apoyo</td><td>Hormigón 22×22 cm</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="sheet block">
+      <h2>Cajetín</h2>
+      <div class="cajetin">
+        <div>Plano</div><div>Nudo tipo N-01 (prueba)</div>
+        <div>Bridas</div><div>EN 1092-2 PN16</div>
+        <div>Eje tubería</div><div>+0,32 m s/ solera</div>
+        <div>Envolvente</div><div>2,30 × 1,18 × 0,80 m</div>
+        <div>Unidades</div><div>metros, 1:1</div>
+      </div>
+      <h2 style="margin-top:16px">Uso en el móvil</h2>
+      <p>Pulsa «Ver en AR», apunta al suelo y mueve el móvil despacio hasta que detecte la superficie. El nudo aparece a tamaño real.</p>
+      <p class="sub">Android usa Scene Viewer o WebXR; iPhone usa Quick Look.</p>
+    </section>
+  </div>
+</div>
+
+<script type="module">
+const mv = document.getElementById('mv');
+const views = { 'b-planta': '0deg 0deg auto', 'b-alzado': '0deg 90deg auto', 'b-iso': '35deg 62deg auto' };
+for (const [id, orbit] of Object.entries(views))
+  document.getElementById(id).addEventListener('click', () => { mv.cameraOrbit = orbit; mv.cameraTarget = 'auto auto auto'; });
+const rot = document.getElementById('b-rot');
+rot.addEventListener('click', () => {
+  const on = rot.getAttribute('aria-pressed') !== 'true';
+  rot.setAttribute('aria-pressed', String(on)); mv.autoRotate = on;
+});
+mv.addEventListener('load', () => { if (!mv.canActivateAR) document.getElementById('noar').hidden = false; });
+</script>
