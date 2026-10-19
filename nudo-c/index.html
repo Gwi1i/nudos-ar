@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nudo C en AR</title>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+:root{--fondo:#f4f5f7;--papel:#fff;--tinta:#1d2430;--suave:#5d6675;--linea:#d9dde3;--azul:#1f55a8;--rojo:#c62828;--ambar:#b26a00;
+--rejilla:rgba(29,36,48,.06)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--fondo:#14171c;--papel:#1c2027;--tinta:#e7eaef;--suave:#9aa3b2;--linea:#313844;--azul:#6f9fe6;--rojo:#ff6b6b;--ambar:#f0a640;--rejilla:rgba(255,255,255,.05)}}
+:root[data-theme="dark"]{--fondo:#14171c;--papel:#1c2027;--tinta:#e7eaef;--suave:#9aa3b2;--linea:#313844;--azul:#6f9fe6;--rojo:#ff6b6b;--ambar:#f0a640;--rejilla:rgba(255,255,255,.05)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+h1{font-size:22px;margin:0}
+.sub{color:var(--suave);font:12px ui-monospace,Consolas,monospace}
+.visor{position:relative;background:var(--papel);border:1px solid var(--linea);border-radius:6px;overflow:hidden;
+background-image:linear-gradient(var(--rejilla) 1px,transparent 1px),linear-gradient(90deg,var(--rejilla) 1px,transparent 1px);background-size:24px 24px}
+model-viewer{width:100%;height:min(68vh,560px);--poster-color:transparent}
+.barra{display:flex;flex-wrap:wrap;gap:6px;padding:10px;border-top:1px solid var(--linea);background:var(--papel)}
+.barra button{font:13px system-ui,sans-serif;padding:7px 10px;border:1px solid var(--linea);background:var(--fondo);color:var(--tinta);border-radius:4px;cursor:pointer}
+.barra button[aria-pressed="true"]{background:var(--azul);border-color:var(--azul);color:#fff}
+.barra .sep{flex:1}
+.ar{position:absolute;right:12px;bottom:12px;padding:10px 14px;border-radius:24px;border:0;background:var(--azul);color:#fff;font-weight:600}
+.hs{background:none;border:0;padding:0;cursor:pointer;position:relative}
+.hs .et{display:block;font:600 11px system-ui,sans-serif;padding:2px 6px;border-radius:10px;background:rgba(255,255,255,.92);color:#1d2430;border:1px solid #9aa3b2;white-space:nowrap}
+.hs-choque .et{background:var(--rojo);color:#fff;border-color:var(--rojo);border-radius:50%;width:20px;height:20px;padding:0;line-height:20px;text-align:center}
+.hs-nudo .et{background:var(--azul);color:#fff;border-color:var(--azul)}
+.hs .tip{display:none;position:absolute;left:50%;bottom:24px;transform:translateX(-50%);background:#1d2430;color:#fff;font:12px system-ui;padding:6px 8px;border-radius:4px;white-space:nowrap}
+.hs:hover .tip,.hs:focus .tip{display:block}
+.hs[data-visible="false"]{opacity:.25}
+.ocultas .hs{display:none}
+.rejillas{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media (max-width:760px){.rejillas{grid-template-columns:1fr}}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:6px;padding:12px 14px}
+section.ancha{grid-column:1/-1}
+h2{font:600 11px ui-monospace,Consolas,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--suave);margin:0 0 8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;color:var(--suave);font-size:11px;text-transform:uppercase;border-bottom:1px solid var(--linea);padding:4px 6px}
+td{border-bottom:1px solid var(--linea);padding:5px 6px;vertical-align:top}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mal{color:var(--rojo);font-weight:600}td.justo{color:var(--ambar);font-weight:600}
+.leyenda{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:12px;color:var(--suave)}
+.leyenda i{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+p.nota{font-size:12.5px;color:var(--suave);margin:6px 0 0}
+ul{margin:4px 0 0;padding-left:18px;font-size:13px}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Nudo C · Cruceta DN250 · Azagra</h1>
+  <span class="sub">Abastecimiento, saneamiento y pluviales · escala 1:1 en AR</span>
+</header>
+<div class="visor" id="visor">
+<model-viewer id="mv" src="nudoC_entorno.glb" alt="Nudo C de Azagra con las redes de abastecimiento, saneamiento y pluviales, pozos y terreno"
+  ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="auto" camera-controls touch-action="pan-y"
+  shadow-intensity="0.8" exposure="1.05" camera-orbit="35deg 62deg 14m" camera-target="0m -0.6m 0m" min-camera-orbit="auto auto 0.5m"
+  max-camera-orbit="auto auto 70m" interaction-prompt="none">
+<button class="hs hs-pozo" slot="hotspot-0" data-position="-2.64m 1.28m 0.01m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">PRS-6</span><span class="tip">PRS-6 · solera 288.64 · prof. 2.29 m</span></button>
+<button class="hs hs-pozo" slot="hotspot-1" data-position="21.24m 0.98m -9.90m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">PRS-5</span><span class="tip">PRS-5 · solera 288.72 · prof. 1.91 m</span></button>
+<button class="hs hs-pozo" slot="hotspot-2" data-position="0.26m 1.26m 1.65m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">PRP-5</span><span class="tip">PRP-5 · solera 289.54 · prof. 1.37 m</span></button>
+<button class="hs hs-pozo" slot="hotspot-3" data-position="9.04m 1.22m -22.81m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">PRP-6</span><span class="tip">PRP-6 · solera 289.63 · prof. 1.24 m</span></button>
+<button class="hs hs-pozo" slot="hotspot-4" data-position="10.57m 1.19m -21.05m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">existente colector</span><span class="tip">existente colector · solera 287.97 · prof. 2.87 m</span></button>
+<button class="hs hs-nudo" slot="hotspot-5" data-position="0.00m 1.25m -0.00m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">NUDO C</span><span class="tip">Cruceta DN250 · eje 290,15 · P-11 (R-1) / P-74 (R-2)</span></button>
+<button class="hs hs-choque" slot="hotspot-6" data-position="-0.47m 0.09m 1.86m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">!</span><span class="tip">Abast. R-1 Ø100 ↔ Pozo PRP-5: se tocan</span></button>
+<button class="hs hs-choque" slot="hotspot-7" data-position="-0.02m 0.71m 1.24m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">!</span><span class="tip">Maniobras ↔ Pozo PRP-5: se tocan</span></button>
+<button class="hs hs-choque" slot="hotspot-8" data-position="0.19m 0.11m 0.89m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">!</span><span class="tip">Nudo C (piezas) ↔ Pozo PRP-5: se tocan</span></button>
+<button class="hs hs-choque" slot="hotspot-9" data-position="8.29m 0.14m -22.94m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">!</span><span class="tip">Abast. R-1 Ø100 ↔ Pozo PRP-6: se tocan</span></button>
+<button class="hs hs-choque" slot="hotspot-10" data-position="0.76m -0.20m -0.49m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">!</span><span class="tip">Nudo C (piezas) ↔ Pluviales R-1: se tocan</span></button>
+<button class="hs hs-choque" slot="hotspot-11" data-position="1.11m 0.02m -0.52m" data-normal="0m 1m 0m" data-visibility-attribute="visible"><span class="et">!</span><span class="tip">Abast. R-2 Ø250 ↔ Pluviales R-1: se tocan</span></button>
+  <button slot="ar-button" class="ar">Ver en AR</button>
+</model-viewer>
+<div class="barra">
+  <button id="b-rot" aria-pressed="false">Rotación automática</button>
+  <button data-vista="0deg 0.1deg">Planta</button>
+  <button data-vista="0deg 90deg">Alzado</button>
+  <button data-vista="35deg 62deg">Isométrica</button>
+  <span class="sep"></span>
+  <button id="b-modelo" aria-pressed="true">Con entorno</button>
+  <button id="b-terreno" aria-pressed="true">Terreno</button>
+  <button id="b-etiq" aria-pressed="true">Etiquetas</button>
+  <button id="b-tema">Tema</button>
+</div>
+</div>
+<div class="leyenda" style="margin:10px 2px 0">
+  <span><i style="background:#1f55a8"></i>Piezas PAM (fundición, epoxi azul)</span>
+  <span><i style="background:#383b40"></i>Tubería FD abastecimiento</span>
+  <span><i style="background:#b35c33"></i>PVC pluviales</span>
+  <span><i style="background:#9e9e99"></i>HG saneamiento · pozos</span>
+  <span><i style="background:#8c8075"></i>Existente</span>
+  <span><i style="background:#cfc8b8"></i>HM-20</span>
+  <span><i style="background:#111"></i>PE desagüe</span>
+</div>
+<div class="rejillas">
+<section>
+  <h2>Despiece del nudo</h2>
+  <table><tr><th>Nº</th><th>Elemento</th><th>Características</th><th>Ud</th></tr><tr><td class='num'>1</td><td>Cruceta bridas</td><td>DN250 FD PN16 · L 700</td><td class='num'>1</td></tr><tr><td class='num'>2</td><td>Válvula de compuerta EURO 20 tipo 23</td><td>DN250 PN16 · F4 L=250</td><td class='num'>2</td></tr><tr><td class='num'>3</td><td>Enlace brida-enchufe</td><td>DN250 FD</td><td class='num'>2</td></tr><tr><td class='num'>4</td><td>Te bridas reducida</td><td>DN250/80 FD · L 430</td><td class='num'>1</td></tr><tr><td class='num'>5</td><td>Válvula de compuerta EURO 20 tipo 23</td><td>DN80 PN16 · F4 L=180</td><td class='num'>1</td></tr><tr><td class='num'>6</td><td>Brida autoblocante</td><td>DN80 para PE Ø90</td><td class='num'>1</td></tr><tr><td class='num'>7</td><td>Reducción bridas</td><td>DN250/100 FD · L 300</td><td class='num'>2</td></tr><tr><td class='num'>8</td><td>Codo bridas 45°</td><td>DN100 FD</td><td class='num'>2</td></tr><tr><td class='num'>9</td><td>Válvula de compuerta EURO 20 tipo 23</td><td>DN100 PN16 · F4 L=190</td><td class='num'>2</td></tr><tr><td class='num'>10</td><td>Te bridas reducida</td><td>DN100/50 FD · L 360</td><td class='num'>1</td></tr><tr><td class='num'>11</td><td>Enlace brida-enchufe</td><td>DN100 FD</td><td class='num'>2</td></tr><tr><td class='num'>12</td><td>Válvula de compuerta EURO 20 tipo 23</td><td>DN50 PN16 · F4 L=150</td><td class='num'>1</td></tr><tr><td class='num'>13</td><td>Brida autoblocante</td><td>DN50 para PE Ø63 (desagüe)</td><td class='num'>1</td></tr><tr><td class='num'>14</td><td>Dados de anclaje</td><td>HM-20 (cruceta, tes y codos)</td><td class='num'>8</td></tr><tr><td class='num'>15</td><td>Sistema de maniobra</td><td>Tubo PVC Ø160 + eje telescópico + trampillón en dado HM-20</td><td class='num'>6</td></tr></table>
+</section>
+<section>
+  <h2>Cajetín</h2>
+  <table>
+    <tr><td>Proyecto</td><td>2406 · Azagra · redes y pavimentación</td></tr>
+    <tr><td>Nudo</td><td>C · P-11 (R-1) / P-74 (R-2) · detalle 2406P05</td></tr>
+    <tr><td>Situación</td><td class="num">ETRS89 UTM 30N · X 591098,02 · Y 4684529,06</td></tr>
+    <tr><td>Abastecimiento</td><td>generatriz inferior 290,01 · eje cruceta 290,15 · terreno 290,94</td></tr>
+    <tr><td>Ramales</td><td>R-2 Ø250 FD (P-73 ↔ P-75) · R-1 Ø100 FD (P-10 ↔ P-12)</td></tr>
+    <tr><td>Origen del modelo</td><td>centro de la cruceta a cota 290,00</td></tr>
+  </table>
+  <h2 style="margin-top:12px">Uso en el móvil</h2>
+  <ul>
+    <li>«Ver en AR» abre la cámara (Android: Chrome; iPhone: Safari).</li>
+    <li>Con entorno se puede escalar con dos dedos; «Sin entorno» queda a 1:1, como el N-01.</li>
+    <li>El terreno es semitransparente: lo enterrado se ve a través de él.</li>
+  </ul>
+</section>
+<section class="ancha">
+  <h2>Choques y holguras (entre elementos que no deben tocarse)</h2>
+  <table><tr><th>Elemento</th><th>Con</th><th>Distancia libre</th></tr><tr><td>Abast. R-1 Ø100</td><td>Pozo PRP-5</td><td class='num mal'>se tocan / se cruzan</td></tr><tr><td>Maniobras</td><td>Pozo PRP-5</td><td class='num mal'>se tocan / se cruzan</td></tr><tr><td>Nudo C (piezas)</td><td>Pozo PRP-5</td><td class='num mal'>se tocan / se cruzan</td></tr><tr><td>Abast. R-1 Ø100</td><td>Pozo PRP-6</td><td class='num mal'>se tocan / se cruzan</td></tr><tr><td>Nudo C (piezas)</td><td>Pluviales R-1</td><td class='num mal'>se tocan / se cruzan</td></tr><tr><td>Abast. R-2 Ø250</td><td>Pluviales R-1</td><td class='num mal'>se tocan / se cruzan</td></tr><tr><td>Abast. R-2 Ø250</td><td>Pozo PRS-5</td><td class='num justo'>0.10 m</td></tr><tr><td>Pluviales R-1</td><td>Salida PE Ø90</td><td class='num justo'>0.13 m</td></tr><tr><td>Abast. R-2 Ø250</td><td>Pozo PRS-6</td><td class='num justo'>0.17 m</td></tr><tr><td>Pluviales R-1</td><td>Saneam. R-2 Ø600</td><td class='num justo'>0.21 m</td></tr><tr><td>Desague PE Ø63</td><td>Maniobras</td><td class='num justo'>0.21 m</td></tr><tr><td>Maniobras</td><td>Salida PE Ø90</td><td class='num justo'>0.25 m</td></tr><tr><td>Colector existente Ø1200</td><td>Pluviales R-1</td><td class='num justo'>0.29 m</td></tr></table>
+  <p class="nota">Medido en el propio modelo 3D (superficie a superficie). Las uniones previstas (tubo en su pieza o pozo, maniobra sobre su válvula, desagüe en el colector) no se cuentan.</p>
+</section>
+<section class="ancha">
+  <h2>Pozos (Arenzana Ø1200)</h2>
+  <table><tr><th>Pozo</th><th>Piezas</th><th>Terreno</th><th>Solera</th><th>Prof.</th></tr><tr><td>PRS-6</td><td>base Ø1200 H 1.10, anillo 0.25, cono asimetrico 0,80, recrecido 0.04</td><td class='num'>290.93</td><td class='num'>288.64</td><td class='num'>2.29</td></tr><tr><td>PRS-5</td><td>base Ø1200 H 1.10, losa reduccion 0,25, recrecido 0.46</td><td class='num'>290.63</td><td class='num'>288.72</td><td class='num'>1.91</td></tr><tr><td>PRP-5</td><td>base Ø1200 H 0.92, losa reduccion 0,25, recrecido 0.10</td><td class='num'>290.91</td><td class='num'>289.54</td><td class='num'>1.37</td></tr><tr><td>PRP-6</td><td>base Ø1200 H 0.79, losa reduccion 0,25, recrecido 0.10</td><td class='num'>290.87</td><td class='num'>289.63</td><td class='num'>1.24</td></tr><tr><td>existente colector</td><td>base Ø1200 H 1.10, anillo 0.50, anillo 0.25, cono asimetrico 0,80, recrecido 0.12</td><td class='num'>290.84</td><td class='num'>287.97</td><td class='num'>2.87</td></tr></table>
+</section>
+<section class="ancha">
+  <h2>Datos y supuestos</h2>
+  <ul>
+    <li><b>Exacto (de los planos):</b> piezas y posiciones del nudo C de la 2406P05 (bridas, longitudes F4, reducción, codos, tes, cruceta, enlaces), trazado en planta de todas las redes, cotas de los perfiles longitudinales, pozos según planos Arenzana (base 1100, anillos, cono asimétrico 800, losa 250), sistema de maniobra de la 2406P05, terreno de la topografía.</li>
+    <li><b>Aproximado:</b> altura de las válvulas DN50, DN80 y DN250 (la DN100, 307 mm del eje al cuadradillo, es de ficha); forma de cuerpo y tapa de las válvulas; brida autoblocante; canto de los dados HM-20 (0,42 m); espesores de los tubos HG Ø600 y del colector HM Ø1200 existente; pozo existente; marco y tapa Ø600.</li>
+    <li>El abastecimiento se toma a la generatriz inferior (criterio de los perfiles); saneamiento y pluviales, a la solera.</li>
+    <li>Los codos de las tuberías en planta se representan como juntas; la salida PE Ø90 de la te DN250/80 se muestra 1,5 m (continúa).</li>
+  </ul>
+</section>
+</div>
+</main>
+<script>
+const mv = document.getElementById('mv');
+const raiz = document.documentElement;
+document.getElementById('b-tema').onclick = () => {
+  const oscuro = raiz.dataset.theme ? raiz.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  raiz.dataset.theme = oscuro ? 'light' : 'dark';
+};
+const rot = document.getElementById('b-rot');
+rot.onclick = () => { const on = rot.getAttribute('aria-pressed') !== 'true'; rot.setAttribute('aria-pressed', on); mv.autoRotate = on; };
+document.querySelectorAll('[data-vista]').forEach(b => b.onclick = () => {
+  const r = mv.getAttribute('src') === 'nudoC.glb' ? '4m' : '14m';
+  mv.cameraOrbit = b.dataset.vista + ' ' + r; mv.cameraTarget = mv.getAttribute('src') === 'nudoC.glb' ? '0m 0.15m 0m' : '0m -0.6m 0m';
+});
+const bMod = document.getElementById('b-modelo');
+bMod.onclick = () => {
+  const entorno = bMod.getAttribute('aria-pressed') !== 'true';
+  bMod.setAttribute('aria-pressed', entorno);
+  bMod.textContent = entorno ? 'Con entorno' : 'Sin entorno';
+  mv.src = entorno ? 'nudoC_entorno.glb' : 'nudoC.glb';
+  mv.arScale = entorno ? 'auto' : 'fixed';
+  mv.cameraOrbit = entorno ? '35deg 62deg 14m' : '35deg 62deg 4m';
+  mv.cameraTarget = entorno ? '0m -0.6m 0m' : '0m 0.15m 0m';
+  document.querySelectorAll('.hs').forEach(h => h.style.display = entorno ? '' : (h.classList.contains('hs-nudo') ? '' : 'none'));
+};
+const bTer = document.getElementById('b-terreno');
+function terreno(visible) {
+  if (!mv.model) return;
+  const m = mv.model.materials.find(x => x.name === 'terreno');
+  if (m) m.pbrMetallicRoughness.setBaseColorFactor([0.55, 0.48, 0.38, visible ? 0.35 : 0.0]);
+}
+bTer.onclick = () => { const on = bTer.getAttribute('aria-pressed') !== 'true'; bTer.setAttribute('aria-pressed', on); terreno(on); };
+mv.addEventListener('load', () => terreno(bTer.getAttribute('aria-pressed') === 'true'));
+const bEt = document.getElementById('b-etiq');
+bEt.onclick = () => { const on = bEt.getAttribute('aria-pressed') !== 'true'; bEt.setAttribute('aria-pressed', on); mv.classList.toggle('ocultas', !on); };
+</script>
+</body>
+</html>
